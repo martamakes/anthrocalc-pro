@@ -9,7 +9,7 @@ from utils.calculators import process_anthropometric_data
 
 app = Flask(__name__)
 # Permitir solicitudes desde GitHub Pages
-CORS(app, resources={r"/api/*": {"origins": "*"}})
+CORS(app, resources={r"/api/*": {"origins": ["https://martamakes.github.io", "http://localhost:3000"]}})
 
 @app.route('/api/health', methods=['GET'])
 def health_check():
