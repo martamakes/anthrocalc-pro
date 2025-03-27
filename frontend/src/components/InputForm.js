@@ -12,7 +12,7 @@ import {
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import InfoIcon from '@mui/icons-material/Info';
-import axios from 'axios';
+import { anthropometryService } from '../services/api';
 
 // Esquema de validación con Yup
 const validationSchema = Yup.object({
@@ -89,13 +89,13 @@ const InputForm = ({ onSubmit, onError, onProcessing }) => {
     try {
       onProcessing();
       
-      // Llamada a la API
-      const response = await axios.post('/api/calculate', values);
+      // Llamada a la API usando el servicio
+      const result = await anthropometryService.calculateAnthropometry(values);
       
-      if (response.data.success) {
-        onSubmit(response.data);
+      if (result.success) {
+        onSubmit(result);
       } else {
-        onError(response.data.errors || 'Error en el procesamiento de datos');
+        onError(result.errors || 'Error en el procesamiento de datos');
       }
     } catch (error) {
       onError(error.response?.data?.errors || 'Error en la conexión');
