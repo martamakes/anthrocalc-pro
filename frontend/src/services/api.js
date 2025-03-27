@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // URL base para la API
 const API_URL = process.env.NODE_ENV === 'production' 
-  ? '/api' 
+  ? 'https://anthrocalc-pro-api.herokuapp.com/api' 
   : 'http://localhost:5000/api';
 
 // Configuración de axios

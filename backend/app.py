@@ -8,7 +8,8 @@ import os
 from utils.calculators import process_anthropometric_data
 
 app = Flask(__name__)
-CORS(app)  # Permitir solicitudes cross-origin para desarrollo
+# Permitir solicitudes desde GitHub Pages
+CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 @app.route('/api/health', methods=['GET'])
 def health_check():
@@ -145,4 +146,4 @@ def get_recommendations():
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port, debug=True)
+    app.run(host='0.0.0.0', port=port)
