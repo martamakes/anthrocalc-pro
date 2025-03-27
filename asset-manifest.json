@@ -1,12 +1,12 @@
 {
   "files": {
-    "main.js": "/anthrocalc-pro/static/js/main.df062658.js",
+    "main.js": "/anthrocalc-pro/static/js/main.a55868d6.js",
     "static/js/453.f54a5eb1.chunk.js": "/anthrocalc-pro/static/js/453.f54a5eb1.chunk.js",
     "index.html": "/anthrocalc-pro/index.html",
-    "main.df062658.js.map": "/anthrocalc-pro/static/js/main.df062658.js.map",
+    "main.a55868d6.js.map": "/anthrocalc-pro/static/js/main.a55868d6.js.map",
     "453.f54a5eb1.chunk.js.map": "/anthrocalc-pro/static/js/453.f54a5eb1.chunk.js.map"
   },
   "entrypoints": [
-    "static/js/main.df062658.js"
+    "static/js/main.a55868d6.js"
   ]
 }
