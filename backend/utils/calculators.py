@@ -111,24 +111,37 @@ def calculate_body_fat_jackson_pollock(gender, age, folds):
         gender (str): Género ('M' para masculino, 'F' para femenino)
         age (int): Edad en años
         folds (dict): Diccionario con valores de pliegues cutáneos en mm:
-                     - 'triceps': Pliegue del tríceps
-                     - 'subscapular': Pliegue subescapular
-                     - 'suprailiac': Pliegue suprailíaco
+                     - Para hombres: 'chest', 'abdomen', 'thigh'
+                     - Para mujeres: 'triceps', 'suprailiac', 'thigh'
         
     Returns:
         float: Porcentaje de grasa corporal
     """
-    # Sumatoria de pliegues
-    sum_folds = folds['triceps'] + folds['subscapular'] + folds['suprailiac']
-    
-    # Cálculo de la densidad corporal según género
     if gender == 'M':
-        density = 1.10938 - (0.0008267 * sum_folds) + (0.0000016 * (sum_folds ** 2)) - (0.0002574 * age)
+        # Verificar que tenemos los pliegues correctos para hombres
+        if 'chest' not in folds or 'abdomen' not in folds or 'thigh' not in folds:
+            # Si no tenemos los pliegues específicos para hombres pero tenemos los 3 estándar,
+            # usamos la fórmula general (menos precisa)
+            sum_folds = folds.get('triceps', 0) + folds.get('subscapular', 0) + folds.get('suprailiac', 0)
+            density = 1.10938 - (0.0008267 * sum_folds) + (0.0000016 * (sum_folds ** 2)) - (0.0002574 * age)
+        else:
+            # Ecuación específica para hombres con los 3 pliegues correctos
+            sum_folds = folds['chest'] + folds['abdomen'] + folds['thigh']
+            density = 1.1093800 - 0.0008267 * sum_folds + 0.0000016 * (sum_folds ** 2) - 0.0002574 * age
     else:  # gender == 'F'
-        density = 1.0994921 - (0.0009929 * sum_folds) + (0.0000023 * (sum_folds ** 2)) - (0.0001392 * age)
+        # Verificar que tenemos los pliegues correctos para mujeres
+        if 'triceps' not in folds or 'suprailiac' not in folds or 'thigh' not in folds:
+            # Si no tenemos los pliegues específicos para mujeres pero tenemos los 3 estándar,
+            # usamos la fórmula general (menos precisa)
+            sum_folds = folds.get('triceps', 0) + folds.get('subscapular', 0) + folds.get('suprailiac', 0)
+            density = 1.0994921 - (0.0009929 * sum_folds) + (0.0000023 * (sum_folds ** 2)) - (0.0001392 * age)
+        else:
+            # Ecuación específica para mujeres con los 3 pliegues correctos
+            sum_folds = folds['triceps'] + folds['suprailiac'] + folds['thigh']
+            density = 1.0994921 - 0.0009929 * sum_folds + 0.0000023 * (sum_folds ** 2) - 0.0001392 * age
     
     # Conversión de densidad a porcentaje de grasa utilizando la ecuación de Siri
-    body_fat_percentage = ((4.95 / density) - 4.5) * 100
+    body_fat_percentage = ((495 / density) - 450)
     
     return round(body_fat_percentage, 1)
 
@@ -242,14 +255,22 @@ def process_anthropometric_data(data):
     results['body_roundness_index'] = calculate_body_roundness_index(waist, height)
     
     # Cálculo de composición corporal
+    # Recopilamos todos los pliegues disponibles
     folds = {
         'triceps': data.get('triceps_fold', 0),
         'subscapular': data.get('subscapular_fold', 0),
-        'suprailiac': data.get('suprailiac_fold', 0)
+        'suprailiac': data.get('suprailiac_fold', 0),
+        'chest': data.get('chest_fold', 0),
+        'abdomen': data.get('abdomen_fold', 0),
+        'thigh': data.get('thigh_fold', 0)
     }
     
-    # Solo calcular composición si se proporcionaron datos de pliegues
-    if all(folds.values()):
+    # Solo calcular composición si se proporcionaron datos de pliegues suficientes
+    basic_folds_provided = folds['triceps'] > 0 and folds['subscapular'] > 0 and folds['suprailiac'] > 0
+    male_specific_folds = gender == 'M' and folds['chest'] > 0 and folds['abdomen'] > 0 and folds['thigh'] > 0
+    female_specific_folds = gender == 'F' and folds['triceps'] > 0 and folds['suprailiac'] > 0 and folds['thigh'] > 0
+    
+    if basic_folds_provided or male_specific_folds or female_specific_folds:
         results['body_fat_percentage'] = calculate_body_fat_jackson_pollock(gender, age, folds)
         results['fat_free_mass'] = calculate_fat_free_mass(weight, results['body_fat_percentage'])
         results['fat_free_mass_index'] = calculate_fat_free_mass_index(results['fat_free_mass'], height)

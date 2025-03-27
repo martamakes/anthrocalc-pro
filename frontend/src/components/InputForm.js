@@ -49,7 +49,17 @@ const validationSchema = Yup.object({
     .transform((value) => (isNaN(value) ? null : value))
     .min(3, 'El pliegue debe ser mayor a 3 mm')
     .max(70, 'El pliegue debe ser menor a 70 mm'),
-  suprailiac_fold: Yup.number()
+  thigh_fold: Yup.number()
+    .nullable()
+    .transform((value) => (isNaN(value) ? null : value))
+    .min(3, 'El pliegue debe ser mayor a 3 mm')
+    .max(70, 'El pliegue debe ser menor a 70 mm'),
+  chest_fold: Yup.number()
+    .nullable()
+    .transform((value) => (isNaN(value) ? null : value))
+    .min(3, 'El pliegue debe ser mayor a 3 mm')
+    .max(70, 'El pliegue debe ser menor a 70 mm'),
+  abdomen_fold: Yup.number()
     .nullable()
     .transform((value) => (isNaN(value) ? null : value))
     .min(3, 'El pliegue debe ser mayor a 3 mm')
@@ -67,6 +77,9 @@ const initialValues = {
   triceps_fold: '',
   subscapular_fold: '',
   suprailiac_fold: '',
+  thigh_fold: '',
+  chest_fold: '',
+  abdomen_fold: '',
 };
 
 const InputForm = ({ onSubmit, onError, onProcessing }) => {
@@ -260,62 +273,212 @@ const InputForm = ({ onSubmit, onError, onProcessing }) => {
                 Mediciones en milímetros (mm). Para cálculos de composición corporal según Jackson-Pollock.
               </Typography>
               
+              {values.gender === 'M' ? (
+                <>
+                  <Alert severity="info" sx={{ mb: 2 }}>
+                    Para hombres, la fórmula de Jackson-Pollock de 3 pliegues utiliza: pecho, abdomen y muslo.
+                  </Alert>
+                  
+                  <Grid container spacing={3}>
+                    {/* Pecho */}
+                    <Grid item xs={12} sm={4}>
+                      <Field name="chest_fold">
+                        {({ field }) => (
+                          <TextField
+                            {...field}
+                            fullWidth
+                            label="Pliegue Pecho (mm)"
+                            type="number"
+                            InputProps={{ inputProps: { min: 3, max: 70, step: 0.1 } }}
+                            error={touched.chest_fold && Boolean(errors.chest_fold)}
+                            helperText={touched.chest_fold && errors.chest_fold}
+                          />
+                        )}
+                      </Field>
+                    </Grid>
+                    
+                    {/* Abdomen */}
+                    <Grid item xs={12} sm={4}>
+                      <Field name="abdomen_fold">
+                        {({ field }) => (
+                          <TextField
+                            {...field}
+                            fullWidth
+                            label="Pliegue Abdomen (mm)"
+                            type="number"
+                            InputProps={{ inputProps: { min: 3, max: 70, step: 0.1 } }}
+                            error={touched.abdomen_fold && Boolean(errors.abdomen_fold)}
+                            helperText={touched.abdomen_fold && errors.abdomen_fold}
+                          />
+                        )}
+                      </Field>
+                    </Grid>
+                    
+                    {/* Muslo */}
+                    <Grid item xs={12} sm={4}>
+                      <Field name="thigh_fold">
+                        {({ field }) => (
+                          <TextField
+                            {...field}
+                            fullWidth
+                            label="Pliegue Muslo (mm)"
+                            type="number"
+                            InputProps={{ inputProps: { min: 3, max: 70, step: 0.1 } }}
+                            error={touched.thigh_fold && Boolean(errors.thigh_fold)}
+                            helperText={touched.thigh_fold && errors.thigh_fold}
+                          />
+                        )}
+                      </Field>
+                    </Grid>
+                  </Grid>
+                </>
+              ) : (
+                <>
+                  <Alert severity="info" sx={{ mb: 2 }}>
+                    Para mujeres, la fórmula de Jackson-Pollock de 3 pliegues utiliza: tríceps, suprailíaco y muslo.
+                  </Alert>
+                  
+                  <Grid container spacing={3}>
+                    {/* Tríceps */}
+                    <Grid item xs={12} sm={4}>
+                      <Field name="triceps_fold">
+                        {({ field }) => (
+                          <TextField
+                            {...field}
+                            fullWidth
+                            label="Pliegue Tríceps (mm)"
+                            type="number"
+                            InputProps={{ inputProps: { min: 3, max: 70, step: 0.1 } }}
+                            error={touched.triceps_fold && Boolean(errors.triceps_fold)}
+                            helperText={touched.triceps_fold && errors.triceps_fold}
+                          />
+                        )}
+                      </Field>
+                    </Grid>
+                    
+                    {/* Suprailíaco */}
+                    <Grid item xs={12} sm={4}>
+                      <Field name="suprailiac_fold">
+                        {({ field }) => (
+                          <TextField
+                            {...field}
+                            fullWidth
+                            label="Pliegue Suprailíaco (mm)"
+                            type="number"
+                            InputProps={{ inputProps: { min: 3, max: 70, step: 0.1 } }}
+                            error={touched.suprailiac_fold && Boolean(errors.suprailiac_fold)}
+                            helperText={touched.suprailiac_fold && errors.suprailiac_fold}
+                          />
+                        )}
+                      </Field>
+                    </Grid>
+                    
+                    {/* Muslo */}
+                    <Grid item xs={12} sm={4}>
+                      <Field name="thigh_fold">
+                        {({ field }) => (
+                          <TextField
+                            {...field}
+                            fullWidth
+                            label="Pliegue Muslo (mm)"
+                            type="number"
+                            InputProps={{ inputProps: { min: 3, max: 70, step: 0.1 } }}
+                            error={touched.thigh_fold && Boolean(errors.thigh_fold)}
+                            helperText={touched.thigh_fold && errors.thigh_fold}
+                          />
+                        )}
+                      </Field>
+                    </Grid>
+                  </Grid>
+                </>
+              )}
+              
+              <Divider sx={{ my: 3 }} />
+              
+              <Typography variant="body2" sx={{ mb: 2 }}>
+                Pliegues alternativos (opcional para fórmulas genéricas):
+              </Typography>
+              
               <Grid container spacing={3}>
-                {/* Tríceps */}
-                <Grid item xs={12} sm={4}>
-                  <Field name="triceps_fold">
-                    {({ field }) => (
-                      <TextField
-                        {...field}
-                        fullWidth
-                        label="Pliegue Tríceps (mm)"
-                        type="number"
-                        InputProps={{ inputProps: { min: 3, max: 70, step: 0.1 } }}
-                        error={touched.triceps_fold && Boolean(errors.triceps_fold)}
-                        helperText={touched.triceps_fold && errors.triceps_fold}
-                      />
-                    )}
-                  </Field>
-                </Grid>
+                {values.gender === 'M' && (
+                  <>
+                    {/* Tríceps (alternativo para hombres) */}
+                    <Grid item xs={12} sm={4}>
+                      <Field name="triceps_fold">
+                        {({ field }) => (
+                          <TextField
+                            {...field}
+                            fullWidth
+                            label="Pliegue Tríceps (mm)"
+                            type="number"
+                            InputProps={{ inputProps: { min: 3, max: 70, step: 0.1 } }}
+                            error={touched.triceps_fold && Boolean(errors.triceps_fold)}
+                            helperText={touched.triceps_fold && errors.triceps_fold}
+                          />
+                        )}
+                      </Field>
+                    </Grid>
+                    
+                    {/* Subescapular (alternativo para hombres) */}
+                    <Grid item xs={12} sm={4}>
+                      <Field name="subscapular_fold">
+                        {({ field }) => (
+                          <TextField
+                            {...field}
+                            fullWidth
+                            label="Pliegue Subescapular (mm)"
+                            type="number"
+                            InputProps={{ inputProps: { min: 3, max: 70, step: 0.1 } }}
+                            error={touched.subscapular_fold && Boolean(errors.subscapular_fold)}
+                            helperText={touched.subscapular_fold && errors.subscapular_fold}
+                          />
+                        )}
+                      </Field>
+                    </Grid>
+                    
+                    {/* Suprailíaco (alternativo para hombres) */}
+                    <Grid item xs={12} sm={4}>
+                      <Field name="suprailiac_fold">
+                        {({ field }) => (
+                          <TextField
+                            {...field}
+                            fullWidth
+                            label="Pliegue Suprailíaco (mm)"
+                            type="number"
+                            InputProps={{ inputProps: { min: 3, max: 70, step: 0.1 } }}
+                            error={touched.suprailiac_fold && Boolean(errors.suprailiac_fold)}
+                            helperText={touched.suprailiac_fold && errors.suprailiac_fold}
+                          />
+                        )}
+                      </Field>
+                    </Grid>
+                  </>
+                )}
                 
-                {/* Subescapular */}
-                <Grid item xs={12} sm={4}>
-                  <Field name="subscapular_fold">
-                    {({ field }) => (
-                      <TextField
-                        {...field}
-                        fullWidth
-                        label="Pliegue Subescapular (mm)"
-                        type="number"
-                        InputProps={{ inputProps: { min: 3, max: 70, step: 0.1 } }}
-                        error={touched.subscapular_fold && Boolean(errors.subscapular_fold)}
-                        helperText={touched.subscapular_fold && errors.subscapular_fold}
-                      />
-                    )}
-                  </Field>
-                </Grid>
-                
-                {/* Suprailíaco */}
-                <Grid item xs={12} sm={4}>
-                  <Field name="suprailiac_fold">
-                    {({ field }) => (
-                      <TextField
-                        {...field}
-                        fullWidth
-                        label="Pliegue Suprailíaco (mm)"
-                        type="number"
-                        InputProps={{ inputProps: { min: 3, max: 70, step: 0.1 } }}
-                        error={touched.suprailiac_fold && Boolean(errors.suprailiac_fold)}
-                        helperText={touched.suprailiac_fold && errors.suprailiac_fold}
-                      />
-                    )}
-                  </Field>
-                </Grid>
-              </Grid>
+                {values.gender === 'F' && (
+                  <>
+                    {/* Subescapular (alternativo para mujeres) */}
+                    <Grid item xs={12} sm={6}>
+                      <Field name="subscapular_fold">
+                        {({ field }) => (
+                          <TextField
+                            {...field}
+                            fullWidth
+                            label="Pliegue Subescapular (mm)"
+                            type="number"
+                            InputProps={{ inputProps: { min: 3, max: 70, step: 0.1 } }}
+                            error={touched.subscapular_fold && Boolean(errors.subscapular_fold)}
+                            helperText={touched.subscapular_fold && errors.subscapular_fold}
+                          />
+                        )}
+                      </Field>
+                    </Grid>
+                  </>
+                )}
               
               <Box sx={{ mt: 2 }}>
                 <Alert severity="info">
-                  Para cálculos precisos de composición corporal, se recomienda completar los tres pliegues cutáneos.
+                  Para cálculos precisos de composición corporal, se recomienda completar los tres pliegues específicos para su género.
                 </Alert>
               </Box>
             </AccordionDetails>
