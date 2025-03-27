@@ -5,7 +5,7 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
-import { getStatusFromValue } from '../../utils/anthropometryUtils';
+import { getStatusFromValue } from '../utils/AnthropometryUtils';
 
 import {
   Chart as ChartJS,

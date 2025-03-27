@@ -5,10 +5,10 @@ import {
 } from '@mui/material';
 
 // Importando subcomponentes
-import BasicMetricsPanel from './results/BasicMetricsPanel';
-import BodyCompositionPanel from './results/BodyCompositionPanel';
-import RecommendationsPanel from './results/RecommendationsPanel';
-import { getThresholds } from '../utils/anthropometryUtils';
+import BasicMetricsPanel from './BasicMetricsPanel';
+import BodyCompositionPanel from './BodyCompositionPanel';
+import RecommendationsPanel from './RecommendationsPanel';
+import { getThresholds } from '../utils/AnthropometryUtils';
 
 // Panel de pestañas para diferentes secciones
 function TabPanel(props) {
