@@ -475,6 +475,7 @@ const InputForm = ({ onSubmit, onError, onProcessing }) => {
                     </Grid>
                   </>
                 )}
+              </Grid>
               
               <Box sx={{ mt: 2 }}>
                 <Alert severity="info">
